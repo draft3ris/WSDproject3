@@ -6,9 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ForumController {
@@ -94,5 +96,16 @@ public class ForumController {
             System.out.println("Successfully deleted data.");
         }
         return "redirect:/list";
+    }
+
+    @RequestMapping(value="/search", method=RequestMethod.GET)
+    public String search_result(@RequestParam("title") String title, @RequestParam("userType") String user_type, Model model){
+        System.out.println("searched title: " + title + ", user_type: " + user_type);
+        List<ForumVO> list = dao.searchForumList(title, user_type);
+        for(ForumVO vo : list){
+            System.out.println(vo);
+        }
+        model.addAttribute("list", list);
+        return "index";
     }
 }

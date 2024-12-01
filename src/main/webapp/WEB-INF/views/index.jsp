@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ include file="./inc/header.jsp"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 
@@ -32,7 +33,7 @@
 <body>
 <div class="container-fluid row g-3">
     <h4>Search post</h4>
-    <form class="row g-3 needs-validation" action="index_search.jsp" method="get" novalidate>
+    <form class="row g-3 needs-validation" action="/search" method="get" novalidate>
         <div class="col-md-4">
             <label for="validationCustom05" class="form-label">User Type</label>
             <select class="form-select" id="validationCustom05" name="user_type">
@@ -47,10 +48,10 @@
             <input type="text" class="form-control" id="validationCustom01" name="title">
         </div>
         <div class="col-md-4 pt-4">
-            <button class="btn btn-primary d-inline-flex align-items-center" type="submit">
+            <button class="btn btn-primary d-inline-flex align-items-center" type="button" onclick="javascript:search()">
                 <i class="bi bi-search"></i>&nbsp Search
             </button>
-            <a href="index.jsp"><button class="btn btn-danger d-inline-flex align-items-center" type="button">
+            <a href="list"><button class="btn btn-danger d-inline-flex align-items-center" type="button">
                 <i class="bi bi-x-square-fill"></i>&nbsp; Clear
             </button></a>
         </div>
@@ -63,30 +64,32 @@
         <table class="table table-striped table-sm table-hover" style="margin:auto;">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Title</th>
-                <th scope="col">Phone no.</th>
-                <th scope="col">Post Type</th>
-                <th scope="col">User Type</th>
-                <th scope="col">Actions</th>
-                <th scope="col">Views</th>
+                <th scope="col" class="align-middle text-center">#</th>
+                <th scope="col" class="align-middle text-center">ID</th>
+                <th scope="col" class="align-middle text-center">Name</th>
+                <th scope="col" class="align-middle text-center">Title</th>
+                <th scope="col" class="align-middle text-center">Phone no.</th>
+                <th scope="col" class="align-middle text-center">Post Type</th>
+                <th scope="col" class="align-middle text-center">User Type</th>
+                <th scope="col" class="align-middle text-center">Actions</th>
+                <th scope="col" class="align-middle text-center">Views</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${list}" var="o">
+            <c:forEach items="${list}" var="o" varStatus="status">
                 <tr>
-                    <td class="align-middle"><c:out value="${o.id}"/></td>
-                    <td class="align-middle"><c:out value="${o.name}"/></td>
-                    <td class="align-middle">
+                    <td class="align-middle text-center">${fn:length(list)-status.index}</td>
+                    <td class="align-middle text-center"><c:out value="${o.id}"/></td>
+                    <td class="align-middle text-center"><c:out value="${o.name}"/></td>
+                    <td class="align-middle text-center">
                         <a class="link-info link-offset-2 link-opacity-75-hover link-opacity-underline-50-hover" href='view/${o.id}'>
                             <c:out value="${o.title}"/>
                         </a>
                     </td>
-                    <td class="align-middle"><c:out value="${o.phone}"/></td>
-                    <td class="align-middle"><c:out value="${o.post_type}"/></td>
-                    <td class="align-middle"><c:out value="${o.user_type}"/></td>
-                    <td class="align-middle">
+                    <td class="align-middle text-center"><c:out value="${o.phone}"/></td>
+                    <td class="align-middle text-center"><c:out value="${o.post_type}"/></td>
+                    <td class="align-middle text-center"><c:out value="${o.user_type}"/></td>
+                    <td class="align-middle text-center">
                         <div class="btn-group">
                             <a href='edit/${o.id}'><button class="btn btn-outline-primary d-inline-flex align-items-center" type="button">
                                 <i class="bi bi-pencil-fill"></i>&nbsp <div id="actionbuttontext">Edit</div>
@@ -96,7 +99,7 @@
                             </button>
                         </div>
                     </td>
-                    <td><c:out value="${o.view_count}"/></td>
+                    <td class="align-middle text-center"><c:out value="${o.view_count}"/></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -115,8 +118,29 @@
             location.href = 'delete_ok/' + id;
         }
     }
+    function search(){
+        const title = document.getElementById("validationCustom01").value.trim();
+        const user_type = document.getElementById("validationCustom05").value.trim();
+        let uri = "search?";
+        if(!title && !user_type){
+            alert("Query is empty!")
+        }
+        else{
+            if(title){
+                uri = uri + "title=" + encodeURIComponent(title);
+            }else{
+                uri = uri + "title="
+            }
+            if(user_type){
+                uri = uri + "&userType=" + encodeURIComponent(user_type);
+            }
+            else{
+                uri = uri + "&userType=";
+            }
+            location.href = uri;
+        }
+    }
 </script>
-
 <%@include file="./inc/footer.jsp"%>
 </body>
 </html>

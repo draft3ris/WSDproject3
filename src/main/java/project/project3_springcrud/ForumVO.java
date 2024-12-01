@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+
 public class ForumVO {
     @Getter @Setter
     private int id;
@@ -40,5 +41,20 @@ public class ForumVO {
         this.add_date = add_date;
         this.fileName = fileName;
         this.view_count = view_count;
+    }
+
+    @Override
+    public String toString() {
+        return "ForumVO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
+                ", phone='" + phone + '\'' +
+                ", post_type='" + post_type + '\'' +
+                ", user_type='" + user_type + '\'' +
+                ", add_date=" + add_date +
+                ", fileName='" + fileName + '\'' +
+                ", view_count=" + view_count +
+                '}';
     }
 }

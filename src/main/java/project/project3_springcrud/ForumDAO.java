@@ -23,6 +23,7 @@ public class ForumDAO {
     private final String FORUM_UPDATE = "update forum_data set name=?,title=?,phone=?,post_type=?,user_type=?,inc_file=? where id=?";
     private final String FORUM_INCREASEVIEW = "update forum_data set views=? where id=?";
     private final String FORUM_DELETE = "delete from forum_data where id=?";
+    private final String FORUM_LIST_SEARCH = "select * from forum_data ";
 
     public int insertForum(ForumVO vo){
         return template.update(FORUM_INSERT,
@@ -33,6 +34,38 @@ public class ForumDAO {
 
     public List<ForumVO> getForumList(){
         return template.query(FORUM_LIST, new Object[]{}, new RowMapper<ForumVO>(){
+            @Override
+            public ForumVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                ForumVO data = new ForumVO();
+                data.setId(rs.getInt("id"));
+                data.setName(rs.getString("name"));
+                data.setTitle(rs.getString("title"));
+                data.setPhone(rs.getString("phone"));
+                data.setPost_type(rs.getString("post_type"));
+                data.setUser_type(rs.getString("user_type"));
+                data.setFileName(rs.getString("inc_file"));
+                data.setAdd_date(rs.getTimestamp("add_date").toLocalDateTime());
+                data.setView_count(rs.getInt("views"));
+                return data;
+            }
+        });
+    }
+
+    public List<ForumVO> searchForumList(String title, String user_type){
+        String sql;
+        if(title.isEmpty() || title == null){
+            sql = FORUM_LIST_SEARCH + "where user_type='" + user_type + "'" + " order by id desc";
+            System.out.println("sql statement: " + sql);
+        }
+        else if(user_type.isEmpty() || user_type == null){
+            sql = FORUM_LIST_SEARCH + "where title like '%" + title + "%'" + " order by id desc";
+            System.out.println("sql statement: " + sql);
+        }
+        else{
+            sql = FORUM_LIST_SEARCH + "where title like '%" + title + "%' and user_type='" + user_type + "'" + " order by id desc";
+            System.out.println("sql statement: " + sql);
+        }
+        return template.query(sql, new Object[]{}, new RowMapper<ForumVO>(){
             @Override
             public ForumVO mapRow(ResultSet rs, int rowNum) throws SQLException {
                 ForumVO data = new ForumVO();
