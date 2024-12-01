@@ -28,7 +28,7 @@
 
 <body>
 <div class="container">
-    <form class="row g-3 needs-validation" action="add_ok.jsp" enctype="multipart/form-data" method="post" novalidate>
+    <form class="row g-3 needs-validation" action="add_ok" method="post" novalidate>
         <div class="col-md-2">
             <label for="validationCustom01" class="form-label">Name</label>
             <input type="text" class="form-control" id="validationCustom01" name="name" required>
@@ -49,7 +49,7 @@
                 Please provide a title.
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label for="validationCustom03" class="form-label">Phone no.</label>
             <input type="tel" class="form-control" id="validationCustom03" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="010-4563-7890" required>
             <div class="valid-feedback">
@@ -59,7 +59,7 @@
                 Please provide a valid phone no.
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label for="validationCustom04" class="form-label">Post Type</label>
             <select class="form-select" id="validationCustom04" name="post_type" required>
                 <option selected value="">Choose...</option>
@@ -74,7 +74,7 @@
                 Please select one option.
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label for="validationCustom05" class="form-label">User Type</label>
             <select class="form-select" id="validationCustom05" name="user_type" required>
                 <option selected value="">Choose...</option>
@@ -89,21 +89,11 @@
                 Please select one option.
             </div>
         </div>
-        <div class="col-md-3">
-            <label for="validationCustom06" class="form-label">Attach file</label>
-            <input type="file" class="form-control" id="validationCustom06" name="file" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback">
-                Please provide a name.
-            </div>
-        </div>
         <div class="col-8">
             <button class="btn btn-primary d-inline-flex align-items-center" type="submit">
                 <i class="bi bi-plus-square-fill"></i>&nbsp Add
             </button>
-            <a href='index.jsp'><button type="button" class="btn btn-secondary d-inline-flex align-items-center">
+            <a href='list'><button type="button" class="btn btn-secondary d-inline-flex align-items-center">
                 <i class="bi bi-arrow-return-left"></i>&nbsp <div id="actionbuttontext">Return to list</div>
             </button></a>
         </div>

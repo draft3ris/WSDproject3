@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BoardService {
+public class ForumService {
     @Autowired
     ForumDAO dao = new ForumDAO();
 }

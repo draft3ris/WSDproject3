@@ -1,17 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="inc/header.jsp"%>
-<%@page import="project.jspfileuploadtest.ForumDAO, project.jspfileuploadtest.ForumVO"%>
-<%
-    String id = request.getParameter("id");
-    System.out.println("edit.jsp id: " + id);
-    boolean hasFile = false;
-    ForumDAO dao = new ForumDAO();
-    ForumVO forum_post = dao.getForumPost(Integer.parseInt(id));
-    System.out.println("edit.jsp forum_post id: " + id);
-    if(forum_post.getFileName() != null && !forum_post.getFileName().isEmpty()){
-        hasFile = true;
-    }
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en" data-bs-theme="dark">
 <!--bootstrap cdn-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -41,11 +30,11 @@
 
 <body>
 <div class="container">
-    <form class="row g-3 needs-validation" action="edit_ok.jsp" enctype="multipart/form-data" method="post" novalidate>
+    <form class="row g-3 needs-validation" action="../edit_ok" method="post" novalidate>
         <div class="col-md-2">
-            <input type="text" class="form-control" name="id" value="<%=id%>" hidden required>
+            <input type="text" class="form-control" name="id" value="${vo.id}" hidden required>
             <label for="validationCustom01" class="form-label">Name</label>
-            <input type="text" class="form-control" id="validationCustom01" name="name" value="<%=forum_post.getName()%>" required>
+            <input type="text" class="form-control" id="validationCustom01" name="name" value="${vo.name}" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -55,7 +44,7 @@
         </div>
         <div class="col-md-10">
             <label for="validationCustom02" class="form-label">Title</label>
-            <input type="text" class="form-control" id="validationCustom02" name="title" value="<%=forum_post.getTitle()%>" required>
+            <input type="text" class="form-control" id="validationCustom02" name="title" value="${vo.title}" required>
             <div class="valid-feedback">
                 Looking good!
             </div>
@@ -65,7 +54,7 @@
         </div>
         <div class="col-md-4">
             <label for="validationCustom03" class="form-label">Phone no.</label>
-            <input type="tel" class="form-control" id="validationCustom03" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" value="<%=forum_post.getPhone()%>" required>
+            <input type="tel" class="form-control" id="validationCustom03" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" value="${vo.phone}" required>
             <div class="valid-feedback">
                 Looking good!
             </div>
@@ -77,9 +66,9 @@
             <label for="validationCustom04" class="form-label">Post Type</label>
             <select class="form-select" id="validationCustom04" name="post_type" required>
                 <option value="">Choose...</option>
-                <option value="Discussion" <%= "Discussion".equals(forum_post.getPost_type()) ? "selected" : "" %>>Discussion</option>
-                <option value="Announcement" <%= "Announcement".equals(forum_post.getPost_type()) ? "selected" : "" %>>Announcement</option>
-                <option value="Poll" <%= "Poll".equals(forum_post.getPost_type()) ? "selected" : "" %>>Poll</option>
+                <option value="Discussion">Discussion</option>
+                <option value="Announcement">Announcement</option>
+                <option value="Poll">Poll</option>
             </select>
             <div class="valid-feedback">
                 Nice!
@@ -92,9 +81,9 @@
             <label for="validationCustom05" class="form-label">User Type</label>
             <select class="form-select" id="validationCustom05" name="user_type" required>
                 <option value="">Choose...</option>
-                <option value="Admin" <%= "Admin".equals(forum_post.getUser_type()) ? "selected" : "" %>>Admin</option>
-                <option value="Moderator" <%= "Moderator".equals(forum_post.getUser_type()) ? "selected" : "" %>>Moderator</option>
-                <option value="User" <%= "User".equals(forum_post.getUser_type()) ? "selected" : "" %>>User</option>
+                <option value="Admin">Admin</option>
+                <option value="Moderator">Moderator</option>
+                <option value="User">User</option>
             </select>
             <div class="valid-feedback">
                 Nice!
@@ -103,34 +92,36 @@
                 Please select one option.
             </div>
         </div>
-        <div class="col-md-4">
-            <label for="validationCustom06" class="form-label">Attach file</label>
-            <input type="file" class="form-control" id="validationCustom06" name="file">
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback">
-                Please provide a name.
-            </div>
-        </div>
-        <div class="col-md-4 pt-5 pb-2">
-            <a href="download.jsp?filename=<%=forum_post.getFileName()%>" id="fileLink"></a>
-        </div>
         <div class="col-8">
             <button class="btn btn-primary d-inline-flex align-items-center" type="submit">
                 <i class="bi bi-pencil-fill"></i>&nbsp; Edit
             </button>
-            <a href="view.jsp?id=<%=forum_post.getId()%>"><button class="btn btn-danger d-inline-flex align-items-center" type="button">
+            <a href="view/${vo.id}"><button class="btn btn-danger d-inline-flex align-items-center" type="button">
                 <i class="bi bi-x-square-fill"></i>&nbsp; Cancel
             </button></a>
-            <a href="index.jsp"><button class="btn btn-secondary d-inline-flex align-items-center" type="button">
+            <button class="btn btn-secondary d-inline-flex align-items-center" type="button" onclick="location.href='../list'">
                 <i class="bi bi-arrow-return-left"></i>&nbsp; Return to list
-            </button></a>
+            </button>
         </div>
     </form>
 </div>
 
 <%@include file="inc/footer.jsp"%>
+<script>
+    window.onload = function () {
+        let valPost = '${vo.post_type}';
+        let valUser = '${vo.user_type}';
+
+        let postOptions = document.querySelector("select[name=post_type]").options;
+        let userOptions = document.querySelector("select[name=user_type]").options;
+        for(let i=0; i<postOptions.length; i++){
+            if(postOptions[i].value === valPost) postOptions[i].selected = true;
+        }
+        for(let i=0; i<userOptions.length; i++){
+            if(userOptions[i].value === valUser) userOptions[i].selected = true;
+        }
+    }
+</script>
 <script>
 (() => {
     'use strict'
@@ -147,10 +138,6 @@
         }, false)
     })
 })()
-</script>
-<script>
-    let a = <%=hasFile%>;
-    if(a){document.getElementById("fileLink").innerHTML = "Download currently uploaded file."}
 </script>
 </body>
 </html>

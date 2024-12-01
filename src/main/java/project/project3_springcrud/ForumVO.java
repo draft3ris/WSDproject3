@@ -1,4 +1,4 @@
-package project.springcrudtest;
+package project.project3_springcrud;
 
 import lombok.Getter;
 import lombok.Setter;
